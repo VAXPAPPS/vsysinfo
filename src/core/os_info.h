@@ -6,6 +6,7 @@ typedef struct {
     char kernel_version[256];
     char os_type[128];
     char computer_model[256];
+    char shell_type[128];
 } OsInfo;
 
 void read_os_info(OsInfo *info);

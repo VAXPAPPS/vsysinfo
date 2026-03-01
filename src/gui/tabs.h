@@ -17,7 +17,6 @@ typedef struct {
     int num_sensors;
 } AppWidgets;
 
-GtkWidget* create_overview_tab(AppWidgets *widgets);
 GtkWidget* create_os_info_tab(AppWidgets *widgets);
 GtkWidget* create_cpu_tab(AppWidgets *widgets);
 GtkWidget* create_mem_tab(AppWidgets *widgets);

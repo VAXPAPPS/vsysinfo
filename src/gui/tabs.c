@@ -44,28 +44,6 @@ static GtkWidget* create_header(const char* text) {
     return label;
 }
 
-GtkWidget* create_overview_tab(AppWidgets *widgets) {
-    (void)widgets;
-    GtkWidget *box = create_container();
-    gtk_box_pack_start(GTK_BOX(box), create_header("System Overview"), FALSE, FALSE, 0);
-    
-    CpuInfo cpu;
-    read_static_cpu_info(&cpu);
-    gtk_box_pack_start(GTK_BOX(box), create_row("CPU Model", cpu.model_name), FALSE, FALSE, 0);
-    
-    MoboInfo mobo;
-    read_mobo_info(&mobo);
-    gtk_box_pack_start(GTK_BOX(box), create_row("Motherboard", mobo.name), FALSE, FALSE, 0);
-    
-    MemInfo mem;
-    read_mem_info(&mem);
-    char mem_str[64];
-    sprintf(mem_str, "%.2f GB", mem.total_gb);
-    gtk_box_pack_start(GTK_BOX(box), create_row("Total Memory", mem_str), FALSE, FALSE, 0);
-
-    return box;
-}
-
 GtkWidget* create_os_info_tab(AppWidgets *widgets) {
     (void)widgets;
     GtkWidget *box = create_container();
@@ -78,6 +56,7 @@ GtkWidget* create_os_info_tab(AppWidgets *widgets) {
     gtk_box_pack_start(GTK_BOX(box), create_row("Kernel Version", os.kernel_version), FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(box), create_row("OS Type", os.os_type), FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(box), create_row("Computer Model", os.computer_model), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), create_row("Shell", os.shell_type), FALSE, FALSE, 0);
 
     GtkWidget *sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
     gtk_box_pack_start(GTK_BOX(box), sep, FALSE, FALSE, 10);
@@ -100,6 +79,24 @@ GtkWidget* create_os_info_tab(AppWidgets *widgets) {
     char disk_str[64];
     sprintf(disk_str, "%.2f GB", total_disk);
     gtk_box_pack_start(GTK_BOX(box), create_row("Total Disk Space", disk_str), FALSE, FALSE, 0);
+
+    // GPUs
+    GpuInfo gpus[10];
+    int gpu_count = 0;
+    read_gpu_info(gpus, &gpu_count, 10);
+    if (gpu_count > 0) {
+        // Just show the first GPU name or list all
+        if (gpu_count == 1) {
+            gtk_box_pack_start(GTK_BOX(box), create_row("Graphics Adapter", gpus[0].name), FALSE, FALSE, 0);
+        } else {
+            char gpus_str[1024] = "";
+            for (int i=0; i<gpu_count; i++) {
+                strncat(gpus_str, gpus[i].name, sizeof(gpus_str) - strlen(gpus_str) - 1);
+                if (i < gpu_count - 1) strncat(gpus_str, "\n", sizeof(gpus_str) - strlen(gpus_str) - 1);
+            }
+            gtk_box_pack_start(GTK_BOX(box), create_row("Graphics Adapters", gpus_str), FALSE, FALSE, 0);
+        }
+    }
 
     return box;
 }

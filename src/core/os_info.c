@@ -1,5 +1,6 @@
 #include "os_info.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/utsname.h>
 
@@ -57,4 +58,17 @@ void read_os_info(OsInfo *info) {
     }
     
     snprintf(info->computer_model, 255, "%s %s", vendor, product);
+
+    // Shell execution path
+    char *shell = getenv("SHELL");
+    if (shell) {
+        char *last_slash = strrchr(shell, '/');
+        if (last_slash) {
+            strncpy(info->shell_type, last_slash + 1, 127);
+        } else {
+            strncpy(info->shell_type, shell, 127);
+        }
+    } else {
+        strcpy(info->shell_type, "Unknown");
+    }
 }
