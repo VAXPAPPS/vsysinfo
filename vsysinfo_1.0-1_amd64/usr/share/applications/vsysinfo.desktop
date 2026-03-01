@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=VAXP Hardware Info
+Comment=Advanced system monitoring tool for VAXP-OS
+Exec=vsysinfo
+Icon=vsysinfo
+Terminal=false
+Type=Application
+Categories=System;Monitor;HardwareSettings;
+Keywords=system;monitor;hardware;cpu;ram;gpu;
