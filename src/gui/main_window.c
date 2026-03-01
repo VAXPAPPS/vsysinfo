@@ -51,6 +51,7 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
     gtk_box_pack_start(GTK_BOX(hbox), stack, TRUE, TRUE, 0);
     
     // Add tabs
+    gtk_stack_add_titled(GTK_STACK(stack), create_os_info_tab(&global_widgets), "os_info", "System Info");
     gtk_stack_add_titled(GTK_STACK(stack), create_overview_tab(&global_widgets), "overview", "Overview");
     gtk_stack_add_titled(GTK_STACK(stack), create_cpu_tab(&global_widgets), "cpu", "Processor");
     gtk_stack_add_titled(GTK_STACK(stack), create_mem_tab(&global_widgets), "ram", "Memory");

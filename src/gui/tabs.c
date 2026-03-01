@@ -5,6 +5,7 @@
 #include "../core/gpu.h"
 #include "../core/sensors.h"
 #include "../core/storage.h"
+#include "../core/os_info.h"
 #include <stdio.h>
 
 static GtkWidget* create_row(const char* label_text, const char* value_text) {
@@ -61,6 +62,44 @@ GtkWidget* create_overview_tab(AppWidgets *widgets) {
     char mem_str[64];
     sprintf(mem_str, "%.2f GB", mem.total_gb);
     gtk_box_pack_start(GTK_BOX(box), create_row("Total Memory", mem_str), FALSE, FALSE, 0);
+
+    return box;
+}
+
+GtkWidget* create_os_info_tab(AppWidgets *widgets) {
+    (void)widgets;
+    GtkWidget *box = create_container();
+    gtk_box_pack_start(GTK_BOX(box), create_header("System Information"), FALSE, FALSE, 0);
+
+    OsInfo os;
+    read_os_info(&os);
+    
+    gtk_box_pack_start(GTK_BOX(box), create_row("Distribution", os.os_name), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), create_row("Kernel Version", os.kernel_version), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), create_row("OS Type", os.os_type), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), create_row("Computer Model", os.computer_model), FALSE, FALSE, 0);
+
+    GtkWidget *sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
+    gtk_box_pack_start(GTK_BOX(box), sep, FALSE, FALSE, 10);
+    
+    // RAM
+    MemInfo mem;
+    read_mem_info(&mem);
+    char mem_str[64];
+    sprintf(mem_str, "%.2f GB", mem.total_gb);
+    gtk_box_pack_start(GTK_BOX(box), create_row("Total RAM", mem_str), FALSE, FALSE, 0);
+
+    // Storage Total
+    StorageInfo storages[10];
+    int st_count = 0;
+    read_storage_info(storages, &st_count);
+    double total_disk = 0;
+    for (int i=0; i<st_count; i++) {
+        total_disk += storages[i].total_gb;
+    }
+    char disk_str[64];
+    sprintf(disk_str, "%.2f GB", total_disk);
+    gtk_box_pack_start(GTK_BOX(box), create_row("Total Disk Space", disk_str), FALSE, FALSE, 0);
 
     return box;
 }
