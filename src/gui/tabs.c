@@ -299,6 +299,8 @@ gboolean update_gui_timer(gpointer user_data) {
     // Update CPU
     if (widgets->num_cores > 0) {
         CpuInfo cpu;
+        memset(&cpu, 0, sizeof(CpuInfo));
+        cpu.logical_cores = widgets->num_cores;
         read_dynamic_cpu_info(&cpu);
         for (int i = 0; i < widgets->num_cores; i++) {
             char freq_str[32];

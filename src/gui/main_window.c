@@ -17,11 +17,19 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
     // Modern aesthetic with dark theme pref
     g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme", TRUE, NULL);
 
+    // Set RGBA visual for transparent background
+    GdkScreen *screen = gtk_widget_get_screen(window);
+    GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
+    if (visual != NULL && gdk_screen_is_composited(screen)) {
+        gtk_widget_set_visual(window, visual);
+        gtk_widget_set_app_paintable(window, TRUE);
+    }
+
     // Apply custom background color
     GtkCssProvider *provider = gtk_css_provider_new();
     gtk_css_provider_load_from_data(provider,
         "window { background-color: rgba(0, 0, 0, 0.392); }", -1, NULL);
-    gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
+    gtk_style_context_add_provider_for_screen(screen,
         GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     g_object_unref(provider);
 
