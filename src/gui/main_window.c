@@ -21,6 +21,7 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
 
     // Main vertical box
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_widget_set_name(vbox, "main-box");
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
     // Add our custom headerbar
@@ -45,10 +46,11 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
     // Apply custom background color and headerbar styles
     GtkCssProvider *provider = gtk_css_provider_new();
     const char *css_data = 
-        "window { background-color: rgba(0, 0, 0, 0.392); border-radius: 12px; }\n"
+        "window { background-color: transparent; }\n"
+        "#main-box { background-color: rgba(0, 0, 0, 0.392); border-radius: 12px; }\n"
         ".vdl-headerbar .title { font-weight: 700; font-size: 13px; color: #ffffff; letter-spacing: 0.5px; }\n"
         ".vdl-window-btn { min-width: 14px; min-height: 14px; border-radius: 50%; padding: 0; margin: 0 4px; border: none; box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2); transition: all 200ms ease; }\n"
-        ".vdl-window-btn:hover { box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2), 0 0 6px rgba(255, 255, 255, 0.15); transform: scale(1.1); }\n"
+        ".vdl-window-btn:hover { box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2), 0 0 6px rgba(255, 255, 255, 0.15); }\n"
         ".vdl-btn-close { background-color: #ff5f57; }\n"
         ".vdl-btn-close:hover { background-color: #ff3b30; }\n"
         ".vdl-btn-minimize { background-color: #ffbd2e; }\n"
