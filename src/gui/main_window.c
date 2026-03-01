@@ -48,6 +48,7 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
     const char *css_data = 
         "window { background-color: transparent; }\n"
         "#main-box { background-color: rgba(0, 0, 0, 0.392); border-radius: 12px; }\n"
+        ".vdl-headerbar { background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(12, 12, 12, 0)); border-bottom: 1px solid rgba(0, 0, 0, 0); padding: 6px 10px 6px 16px; min-height: 45px; }\n"
         ".vdl-headerbar .title { font-weight: 700; font-size: 13px; color: #ffffff; letter-spacing: 0.5px; }\n"
         ".vdl-window-btn { min-width: 14px; min-height: 14px; border-radius: 50%; padding: 0; margin: 0 4px; border: none; box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2); transition: all 200ms ease; }\n"
         ".vdl-window-btn:hover { box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2), 0 0 6px rgba(255, 255, 255, 0.15); }\n"
