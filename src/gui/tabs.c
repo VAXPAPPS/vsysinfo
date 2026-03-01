@@ -230,7 +230,19 @@ GtkWidget* create_gpu_tab(AppWidgets *widgets) {
 
         for (int i = 0; i < count; i++) {
             GtkWidget *row = gtk_list_box_row_new();
-            GtkWidget *lbl = gtk_label_new(gpus[i].name);
+            
+            char gpu_title[512];
+            if (gpus[i].vram_mb > 0) {
+                if (gpus[i].vram_mb >= 1024) {
+                    sprintf(gpu_title, "%s (%.2f GB VRAM)", gpus[i].name, gpus[i].vram_mb / 1024.0);
+                } else {
+                    sprintf(gpu_title, "%s (%ld MB VRAM)", gpus[i].name, gpus[i].vram_mb);
+                }
+            } else {
+                sprintf(gpu_title, "%s (VRAM Unknown)", gpus[i].name);
+            }
+
+            GtkWidget *lbl = gtk_label_new(gpu_title);
             gtk_widget_set_margin_top(lbl, 10);
             gtk_widget_set_margin_bottom(lbl, 10);
             gtk_widget_set_margin_start(lbl, 10);
