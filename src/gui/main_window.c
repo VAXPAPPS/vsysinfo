@@ -1,5 +1,7 @@
 #include "main_window.h"
 #include "tabs.h"
+#include "headerbar.h"
+#include <gtk/gtk.h>
 
 // Global widgets structure to prevent memory leaks from user_data
 static AppWidgets global_widgets;
@@ -13,6 +15,21 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
     gtk_window_set_title(GTK_WINDOW(window), "VAXP Hardware Info");
     gtk_window_set_default_size(GTK_WINDOW(window), 850, 600);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+    
+    // Hide native titlebar and borders since we are drawing our own
+    gtk_window_set_decorated(GTK_WINDOW(window), FALSE);
+
+    // Main vertical box
+    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_container_add(GTK_CONTAINER(window), vbox);
+
+    // Add our custom headerbar
+    GtkWidget *headerbar = create_custom_headerbar(GTK_WINDOW(window), "VAXP Hardware Info");
+    gtk_box_pack_start(GTK_BOX(vbox), headerbar, FALSE, FALSE, 0);
+
+    // Horizontal box for sidebar and content
+    GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
     // Modern aesthetic with dark theme pref
     g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme", TRUE, NULL);
@@ -25,16 +42,24 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
         gtk_widget_set_app_paintable(window, TRUE);
     }
 
-    // Apply custom background color
+    // Apply custom background color and headerbar styles
     GtkCssProvider *provider = gtk_css_provider_new();
-    gtk_css_provider_load_from_data(provider,
-        "window { background-color: rgba(0, 0, 0, 0.392); }", -1, NULL);
+    const char *css_data = 
+        "window { background-color: rgba(0, 0, 0, 0.392); border-radius: 12px; }\n"
+        ".vdl-headerbar .title { font-weight: 700; font-size: 13px; color: #ffffff; letter-spacing: 0.5px; }\n"
+        ".vdl-window-btn { min-width: 14px; min-height: 14px; border-radius: 50%; padding: 0; margin: 0 4px; border: none; box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2); transition: all 200ms ease; }\n"
+        ".vdl-window-btn:hover { box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2), 0 0 6px rgba(255, 255, 255, 0.15); transform: scale(1.1); }\n"
+        ".vdl-btn-close { background-color: #ff5f57; }\n"
+        ".vdl-btn-close:hover { background-color: #ff3b30; }\n"
+        ".vdl-btn-minimize { background-color: #ffbd2e; }\n"
+        ".vdl-btn-minimize:hover { background-color: #f5a623; }\n"
+        ".vdl-btn-maximize { background-color: #28c840; }\n"
+        ".vdl-btn-maximize:hover { background-color: #1db954; }\n";
+
+    gtk_css_provider_load_from_data(provider, css_data, -1, NULL);
     gtk_style_context_add_provider_for_screen(screen,
         GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     g_object_unref(provider);
-
-    GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_container_add(GTK_CONTAINER(window), hbox);
 
     // Stack and Sidebar
     GtkWidget *stack = gtk_stack_new();
