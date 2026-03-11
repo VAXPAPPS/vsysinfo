@@ -83,7 +83,6 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
     gtk_stack_add_titled(GTK_STACK(stack), create_cpu_tab(&global_widgets), "cpu", "Processor");
     gtk_stack_add_titled(GTK_STACK(stack), create_mem_tab(&global_widgets), "ram", "Memory");
     gtk_stack_add_titled(GTK_STACK(stack), create_mobo_tab(&global_widgets), "mobo", "Motherboard");
-    gtk_stack_add_titled(GTK_STACK(stack), create_gpu_tab(&global_widgets), "gpu", "Graphics");
     gtk_stack_add_titled(GTK_STACK(stack), create_sensors_tab(&global_widgets), "sensors", "Sensors");
     gtk_stack_add_titled(GTK_STACK(stack), create_storage_tab(&global_widgets), "storage", "Storage");
 
