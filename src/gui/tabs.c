@@ -7,6 +7,9 @@
 #include "../core/storage.h"
 #include "../core/os_info.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 static GtkWidget* create_row(const char* label_text, const char* value_text) {
     GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
@@ -44,10 +47,57 @@ static GtkWidget* create_header(const char* text) {
     return label;
 }
 
+static const char* find_logo_path(void) {
+    static char logo_path[512];
+    
+    // Try multiple locations
+    const char *paths[] = {
+        "/usr/share/vsysinfo/logo.png",
+        "./logo.png",
+        "logo.png"
+    };
+    
+    for (int i = 0; i < 3; i++) {
+        if (access(paths[i], F_OK) == 0) {
+            strncpy(logo_path, paths[i], sizeof(logo_path) - 1);
+            logo_path[sizeof(logo_path) - 1] = '\0';
+            return logo_path;
+        }
+    }
+    
+    return NULL;
+}
+
 GtkWidget* create_os_info_tab(AppWidgets *widgets) {
     (void)widgets;
-    GtkWidget *box = create_container();
-    gtk_box_pack_start(GTK_BOX(box), create_header("System Information"), FALSE, FALSE, 0);
+    
+    // Create top level container
+    GtkWidget *main_box = create_container();
+    
+    // Create a horizontal box to center the logo
+    GtkWidget *logo_container = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 15);
+    gtk_widget_set_halign(logo_container, GTK_ALIGN_CENTER);
+    gtk_widget_set_valign(logo_container, GTK_ALIGN_START);
+    gtk_box_set_homogeneous(GTK_BOX(logo_container), FALSE);
+    
+    // Center the logo
+    GtkWidget *logo = NULL;
+    const char *logo_path = find_logo_path();
+    if (logo_path) {
+        logo = gtk_image_new_from_file(logo_path);
+    } else {
+        logo = gtk_image_new();
+    }
+    gtk_widget_set_halign(logo, GTK_ALIGN_CENTER);
+    gtk_widget_set_valign(logo, GTK_ALIGN_START);
+    gtk_box_pack_start(GTK_BOX(logo_container), logo, FALSE, FALSE, 0);
+    
+    gtk_box_pack_start(GTK_BOX(main_box), logo_container, FALSE, FALSE, 0);
+    
+    // Create the main scrollable content
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 15);
+    gtk_container_set_border_width(GTK_CONTAINER(box), 0);
+    gtk_box_pack_start(GTK_BOX(main_box), box, TRUE, TRUE, 0);
 
     OsInfo os;
     read_os_info(&os);
@@ -98,7 +148,7 @@ GtkWidget* create_os_info_tab(AppWidgets *widgets) {
         }
     }
 
-    return box;
+    return main_box;
 }
 
 GtkWidget* create_cpu_tab(AppWidgets *widgets) {

@@ -11,6 +11,7 @@ mkdir -p ${PKG_DIR}/DEBIAN
 mkdir -p ${PKG_DIR}/usr/bin
 mkdir -p ${PKG_DIR}/usr/share/applications
 mkdir -p ${PKG_DIR}/usr/share/icons/hicolor/256x256/apps
+mkdir -p ${PKG_DIR}/usr/share/vsysinfo
 
 echo "Copying files to package directory..."
 cp bin/vsysinfo ${PKG_DIR}/usr/bin/
@@ -19,6 +20,13 @@ if [ -f "vsysinfo.png" ]; then
     cp vsysinfo.png ${PKG_DIR}/usr/share/icons/hicolor/256x256/apps/
 else
     echo "Warning: vsysinfo.png not found, icon won't be packaged."
+fi
+
+# Copy logo
+if [ -f "logo.png" ]; then
+    cp logo.png ${PKG_DIR}/usr/share/vsysinfo/
+else
+    echo "Warning: logo.png not found, logo won't be packaged."
 fi
 
 echo "Creating control file..."
