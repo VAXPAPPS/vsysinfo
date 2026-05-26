@@ -25,13 +25,16 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
     gtk_widget_set_name(vbox, "main-box");
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
+    // Stack for content
+    GtkWidget *stack = gtk_stack_new();
+    gtk_stack_set_transition_type(GTK_STACK(stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
+
     // Add our custom headerbar
-    GtkWidget *headerbar = create_custom_headerbar(GTK_WINDOW(window), "VAXP Hardware Info");
+    GtkWidget *headerbar = create_custom_headerbar(GTK_WINDOW(window), "", GTK_STACK(stack));
     gtk_box_pack_start(GTK_BOX(vbox), headerbar, FALSE, FALSE, 0);
 
-    // Horizontal box for sidebar and content
-    GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
+    // Add the stack directly to the main vbox, expanding to fill available space
+    gtk_box_pack_start(GTK_BOX(vbox), stack, TRUE, TRUE, 0);
 
     // Modern aesthetic with dark theme pref
     g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme", TRUE, NULL);
@@ -58,26 +61,16 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
         ".vdl-btn-minimize { background-color: #ffbd2e; }\n"
         ".vdl-btn-minimize:hover { background-color: #f5a623; }\n"
         ".vdl-btn-maximize { background-color: #28c840; }\n"
-        ".vdl-btn-maximize:hover { background-color: #1db954; }\n";
+        ".vdl-btn-maximize:hover { background-color: #1db954; }\n"
+        "stackswitcher { background-color: rgba(0, 0, 0, 0.392); box-shadow: none; border: none; }\n"
+        "stackswitcher button { border-radius: 14px; font-size: 90%; padding: 10px 10px; min-height: 10px; }\n";
 
     gtk_css_provider_load_from_data(provider, css_data, -1, NULL);
     gtk_style_context_add_provider_for_screen(screen,
         GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     g_object_unref(provider);
 
-    // Stack and Sidebar
-    GtkWidget *stack = gtk_stack_new();
-    gtk_stack_set_transition_type(GTK_STACK(stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
-
-    GtkWidget *sidebar = gtk_stack_sidebar_new();
-    gtk_stack_sidebar_set_stack(GTK_STACK_SIDEBAR(sidebar), GTK_STACK(stack));
-    gtk_widget_set_size_request(sidebar, 200, -1);
-    
-    gtk_box_pack_start(GTK_BOX(hbox), sidebar, FALSE, FALSE, 0);
-    
-    GtkWidget *separator = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
-    gtk_box_pack_start(GTK_BOX(hbox), separator, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), stack, TRUE, TRUE, 0);
+    // Remove old sidebar code and hbox references
     
     // Add tabs
     gtk_stack_add_titled(GTK_STACK(stack), create_os_info_tab(&global_widgets), "os_info", "System Info");

@@ -3,6 +3,6 @@
 
 #include <gtk/gtk.h>
 
-GtkWidget* create_custom_headerbar(GtkWindow *window, const char *title_text);
+GtkWidget* create_custom_headerbar(GtkWindow *window, const char *title_text, GtkStack *stack);
 
 #endif // HEADERBAR_H

@@ -45,7 +45,7 @@ static GtkWidget* create_window_button(const char *css_class, GCallback callback
     return btn;
 }
 
-GtkWidget* create_custom_headerbar(GtkWindow *window, const char *title_text) {
+GtkWidget* create_custom_headerbar(GtkWindow *window, const char *title_text, GtkStack *stack) {
     // We create an EventBox to catch mouse events for dragging
     GtkWidget *event_box = gtk_event_box_new();
     gtk_widget_add_events(event_box, GDK_BUTTON_PRESS_MASK);
@@ -86,15 +86,15 @@ GtkWidget* create_custom_headerbar(GtkWindow *window, const char *title_text) {
     gtk_style_context_add_class(lbl_ctx, "title");
     gtk_widget_set_halign(title_label, GTK_ALIGN_START);
 
-    // Spacer to push buttons to the right
-    GtkWidget *spacer = gtk_label_new("");
-    gtk_widget_set_hexpand(spacer, TRUE);
+    // Create the stack switcher
+    GtkWidget *switcher = gtk_stack_switcher_new();
+    gtk_stack_switcher_set_stack(GTK_STACK_SWITCHER(switcher), stack);
+    gtk_box_set_center_widget(GTK_BOX(hbox), switcher);
 
     // Assemble
     gtk_box_pack_start(GTK_BOX(hbox), start_box, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), title_label, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), spacer, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), btn_box, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(hbox), btn_box, FALSE, FALSE, 0);
 
     return event_box;
 }
