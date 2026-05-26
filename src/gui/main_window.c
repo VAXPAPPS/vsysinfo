@@ -1,6 +1,7 @@
 #include "main_window.h"
 #include "tabs.h"
 #include "headerbar.h"
+#include "../theme_manager.h"
 #include <gtk/gtk.h>
 
 // Global widgets structure to prevent memory leaks from user_data
@@ -91,4 +92,7 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
     // Add timer 
     // 1000 milliseconds = 1 second
     g_timeout_add(1000, update_gui_timer, &global_widgets);
+
+    // Initialize the dynamic theme manager
+    theme_manager_init();
 }
