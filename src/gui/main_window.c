@@ -62,8 +62,9 @@ void show_main_window(GtkApplication *app, gpointer user_data) {
         ".vdl-btn-minimize:hover { background-color: #f5a623; }\n"
         ".vdl-btn-maximize { background-color: #28c840; }\n"
         ".vdl-btn-maximize:hover { background-color: #1db954; }\n"
-        "stackswitcher { background-color: rgba(0, 0, 0, 0.392); box-shadow: none; border: none; }\n"
-        "stackswitcher button { border-radius: 14px; font-size: 90%; padding: 10px 10px; min-height: 10px; }\n";
+        "stackswitcher { background-color: rgba(0, 0, 0, 0.392); box-shadow: none; border: none;border-radius: 14px; }\n"
+        "stackswitcher button { background: transparent; box-shadow: none; border: none; border-radius: 14px; font-size: 90%; padding: 10px 10px; min-height: 10px; }\n"
+        "stackswitcher button:checked { background-color: rgba(255, 255, 255, 0.15); }\n";
 
     gtk_css_provider_load_from_data(provider, css_data, -1, NULL);
     gtk_style_context_add_provider_for_screen(screen,

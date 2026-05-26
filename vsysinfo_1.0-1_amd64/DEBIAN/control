@@ -1,0 +1,10 @@
+Package: vsysinfo
+Version: 1.0-1
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: libc6, libgtk-3-0
+Maintainer: VAXP Developer <dev@vaxp.com>
+Description: VAXP Hardware Info
+ Advanced system monitoring tool for VAXP-OS presenting CPU, Memory, 
+ Motherboard, GPU, Sensors, and Storage in a modern GTK3 GUI.
