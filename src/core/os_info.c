@@ -71,4 +71,19 @@ void read_os_info(OsInfo *info) {
     } else {
         strcpy(info->shell_type, "Unknown");
     }
+
+    // Desktop Environment
+    char *de = getenv("XDG_CURRENT_DESKTOP");
+    if (!de) de = getenv("DESKTOP_SESSION");
+    if (!de) de = "Unknown";
+    strncpy(info->desktop_env, de, 127);
+    info->desktop_env[127] = '\0';
+
+    // Window Manager / Compositor
+    char *wm = getenv("XDG_SESSION_DESKTOP");
+    if (!wm) wm = getenv("XDG_CURRENT_DESKTOP");
+    if (!wm) wm = getenv("DESKTOP_SESSION");
+    if (!wm) wm = "Unknown";
+    strncpy(info->window_manager, wm, 127);
+    info->window_manager[127] = '\0';
 }

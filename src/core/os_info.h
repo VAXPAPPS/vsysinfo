@@ -7,6 +7,8 @@ typedef struct {
     char os_type[128];
     char computer_model[256];
     char shell_type[128];
+    char desktop_env[128];
+    char window_manager[128];
 } OsInfo;
 
 void read_os_info(OsInfo *info);

@@ -103,6 +103,8 @@ GtkWidget* create_os_info_tab(AppWidgets *widgets) {
     read_os_info(&os);
     
     gtk_box_pack_start(GTK_BOX(box), create_row("Distribution", os.os_name), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), create_row("Desktop Environment", os.desktop_env), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), create_row("Composer", os.window_manager), FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(box), create_row("Kernel Version", os.kernel_version), FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(box), create_row("OS Type", os.os_type), FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(box), create_row("Computer Model", os.computer_model), FALSE, FALSE, 0);
